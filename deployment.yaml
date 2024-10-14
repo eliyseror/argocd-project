@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 2  # Set your desired number of replicas
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp-container
+          image: "851725362124.dkr.ecr.eu-north-1.amazonaws.com/my_ecr_repo_1:latest"  # Use the correct image reference
+          ports:
+            - containerPort: 8000  # Port your container listens on
+
