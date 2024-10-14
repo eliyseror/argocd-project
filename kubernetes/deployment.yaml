@@ -12,6 +12,8 @@ spec:
       labels:
         app: myapp
     spec:
+      imagePullSecrets:
+        - name: ecr-registry-secret  # Add this line to reference the secret
       containers:
         - name: myapp-container
           image: "851725362124.dkr.ecr.eu-north-1.amazonaws.com/my_ecr_repo_1:latest"  # Use the correct image reference
