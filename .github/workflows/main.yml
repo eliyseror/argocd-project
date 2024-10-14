@@ -29,9 +29,9 @@ jobs:
       - name: Commit changes
         run: |
           git config --local user.name "GitHub Action"
-          git config --local user.email "action@github.com"
+          git config --local user.email "eliyseror@gmail.com"
           git add kubernetes/deployment.yaml
           git commit -m "Update deployment image to ${NEW_IMAGE}"
-          git push origin HEAD:main  # Change 'main' to your default branch if necessary
+          git push origin main  # Change 'main' to your default branch if necessary
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  # Ensure this secret is set
