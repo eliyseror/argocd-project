@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query History</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;  /* Full height of the viewport */
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: {{ bg_color }};  /* Set background color from the environment variable */
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;  /* Increased bottom margin */
+            font-size: 2em;  /* Larger font size for the title */
+        }
+        table {
+            border-collapse: collapse;
+            width: 80%;  /* Increased width */
+            max-width: 800px;  /* Maximum width */
+            font-size: 1.2em;  /* Larger font size for table contents */
+        }
+        th, td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 12px;  /* Increased padding for better spacing */
+        }
+        th {
+            background-color: #f2f2f2;  /* Light gray background for headers */
+        }
+        a {
+            margin-top: 30px;  /* Increased top margin */
+            text-decoration: none;
+            color: blue;  /* Change color as needed */
+            font-size: 1.2em;  /* Larger font size for the link */
+        }
+    </style>
+</head>
+<body>
+    <h2>Query History</h2>
+
+    <table>
+        <tr>
+            <th>Location</th>
+            <th>Date</th>
+        </tr>
+        {% for entry in history %}
+        <tr>
+            <td>{{ entry.location }}</td>
+            <td>{{ entry.date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/">Back to Home</a>
+</body>
+</html>

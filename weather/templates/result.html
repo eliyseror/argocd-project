@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="7200; url=/" />
+    <title>Weather Result</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ location }}</h2>
+    <h2>{{ weather_data[0][0] }}</h2>
+    <h2>{{ weather_data[0][1] }}</h2>
+
+    <table style="width:60%">
+        <tr>
+            {% for i in range(8) %}
+            <tr>
+                <td>{{ weather_data[1][i] }}</td>
+                <td>{{ weather_data[2][i] }}</td>
+                <td>{{ weather_data[3][i] }}</td>
+                <td>{{ weather_data[4][i] }}</td>
+                <td>{{ weather_data[5][i] }}</td>
+            </tr>
+            {% endfor %}
+        </tr>
+    </table>
+
+    <!-- Flash message display -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form id="saveForm" action="/save_weather_data" method="POST">
+        <input type="hidden" name="location" value="{{ location }}">
+        <button type="submit">Save Weather Data</button>
+    </form>
+
+    <a href="/">Back to Home</a>
+    <img src="/static/{{ location }}.png" alt="">
+</body>
+</html>

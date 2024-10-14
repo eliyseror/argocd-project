@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <h2>Eli weather APP</h2>
+
+</head>
+<body>
+<form action="/" method="POST">
+    <label for="location">Enter location:</label><br>
+    <input type="text" id="location" name="location">
+    <input type="submit" value="Submit">
+
+</form>
+<h2>Download Sky Image</h2>
+    <a href="{{ url_for('downloadskies') }}" class="btn">Download Sky Image</a>
+</body>
+</html>

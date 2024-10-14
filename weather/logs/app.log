@@ -1,0 +1,8 @@
+2024-08-30 15:43:49,206 - __main__ - INFO - Received location from form: icland
+2024-08-30 15:44:03,285 - __main__ - INFO - Received location from form: irland
+2024-08-30 15:44:06,685 - __main__ - INFO - Sky image downloaded successfully
+2024-08-30 15:44:17,503 - __main__ - INFO - Received location from form: paris
+2024-08-30 15:46:02,219 - __main__ - INFO - Received location from form: icland
+2024-08-30 15:46:08,618 - __main__ - INFO - Rendering HTML template for location: icland
+2024-09-01 10:58:41,522 - __main__ - INFO - Received location from form: 4
+2024-09-01 10:58:42,898 - __main__ - ERROR - Weather data not found for location: 4
