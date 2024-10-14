@@ -18,8 +18,20 @@ jobs:
 
       - name: Update Kubernetes Deployment
         run: |
-          TAG="${{ github.event.client_payload.tag }}"
-          NEW_IMAGE="eliseror/new_repo:${TAG}"
-          yq eval -i '.spec.template.spec.containers[0].image = "'$NEW_IMAGE'"' kubernetes/deployment.yaml
-          echo "Updated image name to: $NEW_IMAGE"
+          TAG="${{ github.event.client_payload.tag }}"  # Extract the tag from the payload
+          NEW_IMAGE="eliseror/new_repo:${TAG}"  # Construct the new image name
+          echo "Updating image to: $NEW_IMAGE"
 
+          # Update the image in the deployment.yaml
+          yq eval -i '.spec.template.spec.containers[0].image = "'$NEW_IMAGE'"' kubernetes/deployment.yaml
+          echo "Updated image name in deployment.yaml to: $NEW_IMAGE"
+
+      - name: Commit changes
+        run: |
+          git config --local user.name "GitHub Action"
+          git config --local user.email "action@github.com"
+          git add kubernetes/deployment.yaml
+          git commit -m "Update deployment image to ${NEW_IMAGE}"
+          git push origin HEAD:main  # Change 'main' to your default branch if necessary
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}  # Ensure this secret is set
