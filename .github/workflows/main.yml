@@ -1,37 +1,25 @@
-name: Build and Push Docker Image
+name: Handle Repository Dispatch
 
 on:
-  push:
-    branches:
-      - main  # Change this to your default branch if different
+  repository_dispatch:
+    types: [dockerhub-push]
 
 jobs:
-  build:
+  update-image:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Install yq
+        run: |
+          sudo snap install yq  # Install yq if not already installed
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Build and push
-      uses: docker/build-push-action@v2
-      with:
-        context: ../../weather  # Adjusted path to the Dockerfile location
-        file: ../../weather/dockerfile  # Ensure the Dockerfile path is correct
-        push: true
-        tags: eliseror/new_repo:${{ github.sha }}-${{ github.run_number }}  # Use SHA and run number for tagging
-
-    - name: Update Kubernetes Deployment
-      run: |
-       # sed -i 's|image: your_dockerhub_username/your_image_name:.*|image: your_dockerhub_username/your_image_name:${{ github.sha }}|' kubernetes/deployment.yaml
+      - name: Update Kubernetes Deployment
+        run: |
+          TAG="${{ github.event.client_payload.tag }}"
+          NEW_IMAGE="eliseror/new_repo:${TAG}"
+          yq eval -i '.spec.template.spec.containers[0].image = "'$NEW_IMAGE'"' kubernetes/deployment.yaml
           echo "Updated image name to: $NEW_IMAGE"
 
