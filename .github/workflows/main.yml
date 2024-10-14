@@ -1,26 +1,39 @@
-name: Update Deployment on Docker Hub Push
+name: Build and Push Docker Image
 
 on:
-  repository_dispatch:
-    types: [dockerhub-push]
+  push:
+    branches:
+      - main  # Change this to your default branch if different
 
 jobs:
-  update-deployment:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Update deployment.yaml
-        run: |
-          IMAGE_TAG=$(echo "${{ github.event.client_payload.tag }}" | sed 's|refs/tags/||')   
-          sed -i "s|image: eliseror/new_repo:.*|image: eliseror/new_repo:${IMAGE_TAG}|" kubernetes/deployment.yaml
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
 
-      - name: Commit changes
-        run: |
-          git config --local user.email "eliyseror@gmail.com"
-          git config --local user.name "GitHub Action"
-          git add kubernetes/deployment.yaml
-          git commit -m "Update deployment.yaml with new image tag"
-          git push
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: ./weather  # Adjust to your Dockerfile location
+        file: ./weather/dockerfile
+        push: true
+        tags: your_dockerhub_username/your_image_name:${{ github.sha }}  # Use SHA for unique tagging
+
+    - name: Update Kubernetes Deployment
+      run: |
+        sed -i 's|image: your_dockerhub_username/your_image_name:.*|image: your_dockerhub_username/your_image_name:${{ github.sha }}|' kubernetes/deployment.yaml
+        kubectl apply -f kubernetes/deployment.yaml
+      env:
+        KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Set up your Kubeconfig secret
+
