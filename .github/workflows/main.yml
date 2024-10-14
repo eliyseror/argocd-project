@@ -28,12 +28,10 @@ jobs:
         context: ./weather  # Adjust to your Dockerfile location
         file: ./weather/dockerfile
         push: true
-        tags: your_dockerhub_username/your_image_name:${{ github.sha }}  # Use SHA for unique tagging
+        tags: eliseror/new_repo:${{ github.sha }}-${{ github.run_number }}  # Use SHA and run number for tagging
 
     - name: Update Kubernetes Deployment
       run: |
-        sed -i 's|image: your_dockerhub_username/your_image_name:.*|image: your_dockerhub_username/your_image_name:${{ github.sha }}|' kubernetes/deployment.yaml
-        kubectl apply -f kubernetes/deployment.yaml
-      env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Set up your Kubeconfig secret
+       # sed -i 's|image: your_dockerhub_username/your_image_name:.*|image: your_dockerhub_username/your_image_name:${{ github.sha }}|' kubernetes/deployment.yaml
+          echo "Updated image name to: $NEW_IMAGE"
 
