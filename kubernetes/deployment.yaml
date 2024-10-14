@@ -13,10 +13,10 @@ spec:
         app: myapp
     spec:
       imagePullSecrets:
-        - name: ecr-registry-secret  # Add this line to reference the secret
+        - name: dockerhub-secret  # Reference the Docker Hub secret here
       containers:
         - name: myapp-container
-          image: "851725362124.dkr.ecr.eu-north-1.amazonaws.com/my_ecr_repo_1:latest"  # Use the correct image reference
+          image: "eliseror/new_repo/:latest"  # Use your Docker Hub image
           ports:
             - containerPort: 8000  # Port your container listens on
 
