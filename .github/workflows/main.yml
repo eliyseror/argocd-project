@@ -1,0 +1,26 @@
+name: Update Deployment on Docker Hub Push
+
+on:
+  repository_dispatch:
+    types: [dockerhub-push]
+
+jobs:
+  update-deployment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Update deployment.yaml
+        run: |
+          IMAGE_TAG=$(echo "${{ github.event.client_payload.tag }}" | sed 's|refs/tags/||')   
+          sed -i "s|image: eliseror/new_repo:.*|image: eliseror/new_repo:${IMAGE_TAG}|" kubernetes/deployment.yaml
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "eliyseror@gmail.com"
+          git config --local user.name "GitHub Action"
+          git add kubernetes/deployment.yaml
+          git commit -m "Update deployment.yaml with new image tag"
+          git push
